@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Bedrock World Companion</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: #e5e7eb;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #38bdf8;
+    }
+
+    .box {
+      background: #020617;
+      padding: 15px;
+      border-radius: 10px;
+      max-width: 500px;
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+
+    input, select, button {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border-radius: 6px;
+      border: none;
+      font-size: 14px;
+    }
+
+    button {
+      background: #22c55e;
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 12px;
+    }
+
+    button:hover {
+      background: #16a34a;
+    }
+
+    .small {
+      font-size: 13px;
+      color: #94a3b8;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🧭 Bedrock World Companion</h1>
+<p class="small">Quick tools for our Minecraft Bedrock world</p>
+
+<div class="box">
+  <label>World Seed</label>
+  <input id="seed" placeholder="Paste your Bedrock seed here">
+
+  <label>Game Version</label>
+  <select id="version">
+    <option value="bedrock_latest">Bedrock (Latest)</option>
+  </select>
+
+  <label>Your X Coordinate</label>
+  <input id="x" type="number" value="0">
+
+  <label>Your Z Coordinate</label>
+  <input id="z" type="number" value="0">
+</div>
+
+<div class="box">
+  <button onclick="openChunkbase('ancient_city')">Find Ancient City</button>
+  <button onclick="openChunkbase('fortress')">Find Nether Fortress</button>
+  <button onclick="openChunkbase('bastion_remnant')">Find Bastion</button>
+  <button onclick="openChunkbase('end_city')">Find End City</button>
+</div>
+
+<script>
+function openChunkbase(structure) {
+  const seed = document.getElementById("seed").value;
+  const x = document.getElementById("x").value;
+  const z = document.getElementById("z").value;
+
+  if (!seed) {
+    alert("Please enter your world seed first.");
+    return;
+  }
+
+  const baseUrl = "https://www.chunkbase.com/apps/seed-map";
+  const params = new URLSearchParams({
+    seed: seed,
+    platform: "bedrock",
+    x: x,
+    z: z
+  });
+
+  const url = `${baseUrl}?${params.toString()}#${structure}`;
+  window.open(url, "_blank");
+}
+</script>
+
+</body>
+</html>
