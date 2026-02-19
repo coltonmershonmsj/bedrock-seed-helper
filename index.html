@@ -1,190 +1,216 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Bedrock World Companion</title>
-
-  <style>
-    :root {
-      --bg: #020617;
-      --panel: #0f172a;
-      --accent: #38bdf8;
-      --accent2: #a855f7;
-      --text: #e5e7eb;
-      --muted: #94a3b8;
-      --border: #1e293b;
-    }
-
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      font-family: system-ui, Arial, sans-serif;
-      background: radial-gradient(circle at top, #020617, #000);
-      color: var(--text);
-    }
-
-    /* HEADER */
-    .hero {
-      background-image: url("header.jpg");
-      background-size: cover;
-      background-position: center;
-      padding: 60px 20px;
-      text-align: center;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .hero h1 {
-      font-size: 36px;
-      margin: 0;
-      text-shadow: 0 0 20px rgba(56,189,248,0.6);
-    }
-
-    .hero p {
-      color: var(--muted);
-      margin-top: 8px;
-    }
-
-    /* MAIN LAYOUT */
-    .container {
-      max-width: 900px;
-      margin: auto;
-      padding: 30px 20px;
-      display: grid;
-      gap: 25px;
-    }
-
-    .card {
-      background: linear-gradient(180deg, #020617, #020617cc);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 20px;
-      box-shadow: 0 0 30px rgba(0,0,0,0.6);
-    }
-
-    h2 {
-      margin-top: 0;
-      color: var(--accent);
-      font-size: 20px;
-    }
-
-    label {
-      display: block;
-      margin-top: 12px;
-      font-size: 14px;
-      color: var(--muted);
-    }
-
-    input {
-      width: 100%;
-      padding: 10px;
-      margin-top: 6px;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      background: #020617;
-      color: var(--text);
-      font-size: 15px;
-    }
-
-    /* BUTTONS */
-    .buttons {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 15px;
-      margin-top: 10px;
-    }
-
-    button {
-      padding: 14px;
-      border-radius: 14px;
-      border: none;
-      font-weight: 700;
-      font-size: 15px;
-      cursor: pointer;
-      color: black;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      box-shadow: 0 0 20px rgba(168,85,247,0.4);
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
-    }
-
-    button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 0 35px rgba(168,85,247,0.7);
-    }
-
-    footer {
-      text-align: center;
-      padding: 20px;
-      color: var(--muted);
-      font-size: 13px;
-    }
-  </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>🔥 Nether World Companion</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
+  <header class="hero">
+    <div class="hero__inner">
+      <div class="badge">Bedrock World • Seed Locked • Chunkbase Shortcuts</div>
+      <h1>🔥 Nether World Companion</h1>
+      <p>
+        Portal math, saved locations, checklist, and structure shortcuts — all tied to your world.
+      </p>
 
-  <!-- HERO -->
-  <div class="hero">
-    <h1>🧭 Bedrock World Companion</h1>
-    <p>Quick access tools for our Minecraft Bedrock world</p>
-  </div>
-
-  <!-- CONTENT -->
-  <div class="container">
-
-    <div class="card">
-      <h2>World Settings</h2>
-
-      <label>World Seed</label>
-      <input id="seed" placeholder="Paste your Bedrock seed">
-
-      <label>Your X Coordinate</label>
-      <input id="x" type="number" value="0">
-
-      <label>Your Z Coordinate</label>
-      <input id="z" type="number" value="0">
-    </div>
-
-    <div class="card">
-      <h2>Structure Finder</h2>
-
-      <div class="buttons">
-        <button onclick="openChunkbase('ancient_city')">Ancient City</button>
-        <button onclick="openChunkbase('fortress')">Nether Fortress</button>
-        <button onclick="openChunkbase('bastion_remnant')">Bastion</button>
-        <button onclick="openChunkbase('end_city')">End City</button>
+      <div class="quickbar">
+        <button class="btn ghost" id="btnLoad">Load Saved</button>
+        <button class="btn ghost" id="btnSave">Save</button>
+        <button class="btn danger" id="btnReset">Reset</button>
       </div>
+
+      <div class="toast" id="toast" aria-live="polite"></div>
     </div>
+  </header>
 
-  </div>
+  <main class="wrap">
+    <!-- WORLD SETTINGS -->
+    <section class="card">
+      <div class="card__title">
+        <h2>World Settings</h2>
+        <span class="hint">Seed is permanently embedded into this website</span>
+      </div>
 
-  <footer>
-    Built for our Bedrock world • Powered by Chunkbase
-  </footer>
+      <div class="grid2">
+        <div>
+          <label>World Seed (Locked)</label>
+          <input id="seed" readonly />
+          <div class="mini">This site always uses your world seed.</div>
+        </div>
+        <div>
+          <label>Platform (Locked)</label>
+          <input id="platformDisplay" readonly />
+          <div class="mini">Set to Bedrock for your world.</div>
+        </div>
+      </div>
 
-  <script>
-    function openChunkbase(structure) {
-      const seed = document.getElementById("seed").value;
-      const x = document.getElementById("x").value;
-      const z = document.getElementById("z").value;
+      <div class="grid2">
+        <div>
+          <label>Your X</label>
+          <input id="x" type="number" value="0" />
+        </div>
+        <div>
+          <label>Your Z</label>
+          <input id="z" type="number" value="0" />
+        </div>
+      </div>
 
-      if (!seed) {
-        alert("Please enter your world seed.");
-        return;
-      }
+      <div class="actions">
+        <button class="btn" id="btnCopySeed">Copy Seed</button>
+        <button class="btn ghost" id="btnCopyCoords">Copy Coords</button>
+        <button class="btn ghost" id="btnUseLoc">Use Selected Location → Coords</button>
+      </div>
 
-      const url =
-        "https://www.chunkbase.com/apps/seed-map"
-        + "?seed=" + encodeURIComponent(seed)
-        + "&platform=bedrock"
-        + "&x=" + x
-        + "&z=" + z
-        + "#" + structure;
+      <div class="divider"></div>
 
-      window.open(url, "_blank");
-    }
-  </script>
+      <div class="callout">
+        <b>Note:</b> Structure buttons open Chunkbase in a new tab. If nothing opens,
+        your browser blocked popups — allow popups for this site.
+      </div>
+    </section>
 
+    <!-- STRUCTURE FINDER -->
+    <section class="card">
+      <div class="card__title">
+        <h2>Structure Finder</h2>
+        <span class="hint">Always opens Chunkbase with YOUR seed</span>
+      </div>
+
+      <div class="chiprow">
+        <button class="chip" data-tool="nether-fortress">Nether Fortress</button>
+        <button class="chip" data-tool="bastion-remnant">Bastion Remnant</button>
+        <button class="chip" data-tool="ruined-portal">Ruined Portal</button>
+        <button class="chip" data-tool="stronghold">Stronghold</button>
+        <button class="chip" data-tool="ancient-city">Ancient City</button>
+        <button class="chip" data-tool="end-city">End City</button>
+        <button class="chip glow" data-tool="seed-map">Open Seed Map</button>
+      </div>
+
+      <div class="mini">
+        Tip: Enter your current X/Z first, then click a structure to open Chunkbase centered on you.
+      </div>
+    </section>
+
+    <!-- PORTAL CALC -->
+    <section class="card">
+      <div class="card__title">
+        <h2>Portal Calculator</h2>
+        <span class="hint">Overworld ↔ Nether conversion</span>
+      </div>
+
+      <div class="grid2">
+        <div>
+          <label>Overworld X</label>
+          <input id="owX" type="number" value="0" />
+        </div>
+        <div>
+          <label>Overworld Z</label>
+          <input id="owZ" type="number" value="0" />
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn" id="btnToNether">Overworld → Nether (÷8)</button>
+        <button class="btn alt" id="btnToOver">Nether → Overworld (×8)</button>
+      </div>
+
+      <div class="grid2">
+        <div>
+          <label>Result X</label>
+          <input id="resX" readonly />
+        </div>
+        <div>
+          <label>Result Z</label>
+          <input id="resZ" readonly />
+        </div>
+      </div>
+
+      <div class="mini">
+        This helps you build linked portals correctly.
+      </div>
+    </section>
+
+    <!-- SAVED LOCATIONS -->
+    <section class="card">
+      <div class="card__title">
+        <h2>Saved Locations</h2>
+        <span class="hint">Bases, farms, portals — saved in your browser</span>
+      </div>
+
+      <div class="grid3">
+        <div>
+          <label>Name</label>
+          <input id="locName" placeholder="Example: Wither Skeleton Farm" />
+        </div>
+        <div>
+          <label>X</label>
+          <input id="locX" type="number" value="0" />
+        </div>
+        <div>
+          <label>Z</label>
+          <input id="locZ" type="number" value="0" />
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn" id="btnAddLoc">Add Location</button>
+        <button class="btn ghost" id="btnFillFromPlayer">Use My X/Z</button>
+        <button class="btn danger" id="btnClearLocs">Clear Locations</button>
+      </div>
+
+      <div class="list" id="locList"></div>
+
+      <div class="divider"></div>
+
+      <div class="card__title">
+        <h3>Share with friends</h3>
+        <span class="hint">Export/Import locations + checklist</span>
+      </div>
+
+      <label>Export Code (copy & send)</label>
+      <textarea id="exportBox" rows="4" placeholder="Click Export to generate your code..."></textarea>
+
+      <div class="actions">
+        <button class="btn" id="btnExport">Export</button>
+        <button class="btn alt" id="btnImport">Import</button>
+        <button class="btn ghost" id="btnCopyExport">Copy Export Code</button>
+      </div>
+    </section>
+
+    <!-- WORLD CHECKLIST -->
+    <section class="card">
+      <div class="card__title">
+        <h2>World Checklist</h2>
+        <span class="hint">Saved in your browser</span>
+      </div>
+
+      <div class="grid2">
+        <div>
+          <label>Add a task</label>
+          <input id="taskInput" placeholder="Example: Get blaze rods for eyes of ender" />
+        </div>
+        <div class="actions actions--bottom">
+          <button class="btn" id="btnAddTask">Add Task</button>
+          <button class="btn danger" id="btnClearTasks">Clear Tasks</button>
+        </div>
+      </div>
+
+      <div class="list" id="taskList"></div>
+    </section>
+
+    <footer class="foot">
+      <div class="foot__inner">
+        <span>🔥 Seed Locked:</span>
+        <code id="seedBadge"></code>
+        <span class="dot">•</span>
+        <span>Made for your Bedrock world</span>
+      </div>
+    </footer>
+  </main>
+
+  <script src="app.js"></script>
 </body>
 </html>
-
